@@ -27,7 +27,7 @@ Le projet Atlas Trekking utilise les technologies suivantes:
 1. Clonez le projet depuis GitHub en exécutant la commande suivante dans votre terminal :
 
 ```
-git clone https://github.com/votre-nom-utilisateur/Atlas_Trekking.git
+https://github.com/youneshimi/Atlas_Trekking.git
 ```
 
 1. Installez les dépendances requises en exécutant la commande suivante :
@@ -40,7 +40,6 @@ composer install
 2. Créez la base de données en exécutant la commande suivante :
 
 ```
-bash
 php bin/console doctrine:database:create
 ```
 
