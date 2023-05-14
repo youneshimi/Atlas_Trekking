@@ -1,0 +1,162 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {{ trick.name }} -
+    {{parent()}}
+{% endblock %}
+
+{% block body %}
+        <section id="trick-hero" class="d-flex flex-row flex-wrap align-items-center justify-content-center container-fluid px-0 position-relative pb-3 text-center">
+            <img id="trick-cover" class="trick-img" data-link="{{ trick.coverImg.link|default('default.jpg') }}" src="{{ asset('uploads/medias/' ~ trick.coverImg.link|default('default.jpg')) }}" alt="{{ trick.coverImg.alt|default('Pas de texte alternatif') }}">
+            <div class="card col-md-8 p-lg-8 mx-auto catchphrase-background p-2 container position-absolute">
+                <h1 class="display-4 fw-normal text-white">{{ trick.name }}</h1>
+            </div>
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <div class="trick-action px-3 py-2 ms-auto me-3">
+                <a href="/trick/editer/{{ trick.slug }}/"><em class="zoom-in mx-2 fas fa-pen text-warning"></em></a>
+                {% if is_granted('delete', trick) %}
+                    <span class="delete-action" data-bs-toggle="modal" data-bs-target="#confirmModal" data-name="{{ trick.name }}" data-slug="{{ trick.slug }}"><em class="zoom-in mx-2 fas fa-trash-alt text-danger"></em></span>
+                {% endif %}
+            </div>
+            {% endif %}
+        </section>
+        <div id="trick-media" class="d-flex flex-row flex-wrap justify-content-around container-fluid px-0 py-3 text-center">
+            <div class="col-12">
+                <button onclick="$('#carouselExampleControls').toggleClass('d-none')" type="button" class="btn btn-primary mx-auto d-block d-md-none mt-5">Voir les médias</button>
+            </div>
+            <div id="carouselExampleControls" class="carousel container slide w-100 d-none d-md-block px-0" data-bs-ride="carousel">
+                <div class="carousel-inner py-2">
+                    {% set pageNumber = (trick.medias|length / 3)|round(0, 'ceil') %}
+                    {% for i in 1..pageNumber %}
+                        <div class="carousel-item {% if i == 1 %}{{ 'active' }}{% endif %}">
+                            <div class="d-flex justify-content-center">
+                                {% set mediaIndex = 0 %}
+                                {% for media in trick.medias|slice((i*3-3),(i*3)) %}
+
+                                    <figure class="col-3 px-2 trick carousel-element mx-2"  data-trick="{{ trick.slug }}" data-cover="{{ media.id }}" data-type="{{ media.type }}" data-alt="{{ media.alt|default('Pas de texte alternatif') }}" data-link="{{ media.link|default('default.jpg') }}">
+                                        <div class="card h-100 bg-light d-flex flex-row flex-wrap card-body p-2 shadow-sm">
+                                            {% if media.type == "image" %}
+                                                <img class="w-100 of-cover h-100" src="{{ asset('uploads/medias/' ~ media.link|default('default.jpg')) }}" alt="{{ media.alt|default('Pas de texte alternatif') }}" />
+                                            {% elseif media.type == "video" %}
+                                                <div class="video-container w-100 h-100">
+                                                    <div class="no-clickable">
+                                                    </div>
+                                                    {{ media.link| raw  }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </figure>
+                                    {% set mediaIndex = mediaIndex + 1 %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% if trick.medias|length > 3 %}
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                    <em class="fas fa-chevron-left text-primary"></em>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                    <em class="fas fa-chevron-right text-primary"></em>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    <div class="container-fluid">
+        <section id="trick-info" class="d-flex flex-row flex-wrap container justify-content-around my-3 py-2 text-center">
+            <div class="d-flex flex-row flex-wrap justify-content-center col-12 col-md-7 mb-2">
+                <h3 class="col-12 fw-bold mt-1">{{ trick.name }}</h3>
+                <div class="alert alert-primary trick-category small">{{ trick.category.name }}</div>
+                <small class="w-100 text-muted mb-1"><em class="fas fa-clock me-2"></em>Trick posté par <span class="fw-bold text-primary">{{ trick.user.username }}</span> le {{ trick.createdAt|date('d/m/Y à H:i') }}</small>
+                <p class="col-12 text-justify">{{ trick.description }}</p>
+                <button class="btn btn-outline-primary mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    Voir l'historique des contributions
+                </button>
+                <div class="collapse col-12 mt-4" id="collapseExample">
+                    {% for contributor in trick.contributors %}
+                        <div class="w-100 ultra-small text-muted mb-1"><em class="fas fa-clock me-2"></em>Modification le {{ contributor.updatedAt|date('d/m/Y à H:i') }}  par <span class="fw-bold text-primary">{{ contributor.user.username }}</span></div>
+                    {% endfor %}
+                        <div class="w-100 ultra-small text-muted mb-1"><em class="fas fa-clock me-2"></em>Création le {{ trick.createdAt|date('d/m/Y à H:i') }}  par <span class="fw-bold text-primary">{{ trick.user.username }}</span></div>
+                </div>
+            </div>
+        </section>
+        <section id="trick-comments" class="d-flex flex-column flex-wrap container justify-content-around align-items-center my-3 pt-5 pb-5 text-center">
+            <div id="comment-list" class="container mb-5">
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800 mx-2"><em class="fas fa-comments text-primary me-2"></em>Commentaires</h1>
+                </div>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <div class="text-start mb-3">
+                        <span class="col-12 fw-bold text-primary"><img class="profile-img-1 me-2" src="/uploads/medias/{{ app.user.image }}" alt="Image de profil de {{ app.user.username }}" /> {{ app.user.username }}</span>
+                        {{ form_start(commentForm, {'attr': {'class': 'd-flex flex-row justify-content-end flex-wrap px-3'}}) }}
+                            <div class="w-100 mb-2">
+                                {{ form_widget(commentForm.content) }}
+                                <small>{{ form_help(commentForm.content) }}</small>
+                                <div class="form-error">
+                                    {{ form_errors(commentForm.content) }}
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success px-3"><em class="fas fa-paper-plane me-2"></em>Poster</button>
+                        {{ form_end(commentForm) }}
+                    </div>
+                {% else %}
+                    <div class="alert alert-danger" role="alert">
+                        <em class="fas fa-exclamation-circle me-2"></em>Vous devez être connecté pour pouvoir ajouter un commentaire
+                    </div>
+                {% endif %}
+                <hr />
+                {% if comments is empty %}
+                    <div class="small text-muted font-italic">Il n'y a pas encore de commentaire</div>
+                {% else %}
+                    {% for comment in comments %}
+                        <div class="mb-3 col-12 col-md-10 offset-md-1">
+                            <div class="d-flex flex-row flex-wrap card-body p-2 align-items-center justify-content-center">
+                                <img class="profile-img-2  col-2 col-md-1" src="/uploads/medias/{{ comment.user.image }}" alt="Image de profil de {{ comment.user.username }}" />
+                                <div class="col-10 col-md-11 mb-2 px-3">
+                                    <div class="w-100 text-start">
+                                        <em class="fas fa-comment reverse-h me-1"></em>Posté par <span class="fw-bold text-primary">{{ comment.user.username }}</span>
+                                        <span class="ms-auto text-muted float-end">Le {{ comment.createdAt|date('d/m/Y à H:i') }}<em class="far fa-clock ms-1"></em></span>
+                                    </div>
+                                    <blockquote class="blockquote text-start w-100 m-0 ms-1 px-0">
+                                        <small class="card card-text border-0 text-dark col-12 p-4 mt-2">{{ comment.content }}</small>
+                                    </blockquote>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            {% if remain_comments == true %}
+            <div class="w-100">
+                <img id="loader" class="col-12 rounded mx-auto" src="{{ asset('img/loader.gif') }}" alt="Trick" />
+            </div>
+            <button class="btn btn-primary w-25" id="load-more" data-method="load-comments" data-id="{{ trick.id }}" data-limit="10" data-offset="10">
+                <em class="fas fa-spinner"></em><br />Charger plus
+            </button>
+            {% endif %}
+        </section>
+    </div>
+
+    {% include "parts/_confirm.html.twig" %}
+
+    <div class="modal fade" id="mediaModal" tabindex="-1" role="dialog" aria-labelledby="mediaModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body d-flex flex-column justify-content-center align-items-center">
+                    ...
+                </div>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <a href="#" class="btn btn-success w-75 mt-2 mx-auto">Définir en tant que image de couverture</a>';
+                {% endif %}
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('media-widget') }}
+{% endblock %}

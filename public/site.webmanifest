@@ -1,0 +1,8 @@
+{
+  "name": "AtlasTrekking",
+  "short_name": "AtlasTrekking",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "Vous permet de partager votre passion de la neige et vos tricks pour contribuer à une communauté active !"
+}

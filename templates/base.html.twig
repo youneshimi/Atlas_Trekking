@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="Younes Shimi">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Atlas Trekking{% endblock %}</title>
+        <link rel="icon" href="{{ asset('favicon.ico') }}">
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+    </head>
+    <body>
+    <div class="snowflakes" aria-hidden="true">
+        {% for i in 0..3 %}
+            <div class="snowflake">❅</div>
+        {% endfor %}
+        {% for i in 0..3 %}
+            <div class="snowflake d-none d-md-block">❅</div>
+        {% endfor %}
+    </div>
+        {% include "parts/_header.html.twig" %}
+        {% include "parts/_messages.html.twig" %}
+        <main>
+            {% block body %}{% endblock %}
+        </main>
+        {% include "parts/_footer.html.twig" %}
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </body>
+</html>
