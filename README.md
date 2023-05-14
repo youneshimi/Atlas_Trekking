@@ -36,7 +36,7 @@ https://github.com/youneshimi/Atlas_Trekking.git
 composer install
 ```
 
-1. Configurez la base de données dans le fichier `.env` en modifiant la variable `DATABASE_URL`.
+1. Configurez la base de données et Smtp dans le fichier `.env` en modifiant la variable `DATABASE_URL` & `MAILER_DSN`.
 2. Créez la base de données en exécutant la commande suivante :
 
 ```
