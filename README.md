@@ -30,32 +30,32 @@ Le projet Atlas Trekking utilise les technologies suivantes:
 https://github.com/youneshimi/Atlas_Trekking.git
 ```
 
-1. Installez les dépendances requises en exécutant la commande suivante :
+2. Installez les dépendances requises en exécutant la commande suivante :
 
 ```
 composer install
 ```
 
-1. Configurez la base de données et Smtp dans le fichier `.env` en modifiant la variable `DATABASE_URL` & `MAILER_DSN`.
-2. Créez la base de données en exécutant la commande suivante :
+3. Configurez la base de données et Smtp dans le fichier `.env` en modifiant la variable `DATABASE_URL` & `MAILER_DSN`.
+4. Créez la base de données en exécutant la commande suivante :
 
 ```
 php bin/console doctrine:database:create
 ```
 
-1. Exécutez les migrations pour créer les tables de base de données en exécutant la commande suivante :
+5. Exécutez les migrations pour créer les tables de base de données en exécutant la commande suivante :
 
 ```
 php bin/console doctrine:migrations:migrate
 ```
 
-1. Démarrez le serveur en exécutant la commande suivante :
+6. Démarrez le serveur en exécutant la commande suivante :
 
 ```
 symfony server:start
 ```
 
-1. Accédez à l'application en ouvrant votre navigateur et en visitant l'URL suivante :
+7. Accédez à l'application en ouvrant votre navigateur et en visitant l'URL suivante :
 
 ```
 http://localhost:8000
