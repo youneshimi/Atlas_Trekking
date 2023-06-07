@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://symfony.com/logos/symfony_white_02.png" alt="Logo Flutter" width="200px">
+</p>
+
 # Atlas Trekking 🏔️
 
 Atlas Trekking est un projet Symfony 6 qui permet aux gestionnaires d'une agence d'ajouter les dernières activités de l'agence dans trois catégories différentes : Activité culturelle, Activité de montagne et Activité de bien-être.
