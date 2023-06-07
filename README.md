@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://symfony.com/logos/symfony_white_02.png" alt="Logo Flutter" width="200px">
+  <img src="https://symfony.com/logos/symfony1.gif" alt="Logo Flutter" width="200px">
 </p>
 
 # Atlas Trekking 🏔️
