@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.imgur.com/b9zsbzn.png" alt="Logo Flutter" width="200px">
+  <img src="https://i.imgur.com/b9zsbzn.png" alt="Logo Flutter" width="300px">
 </p>
 
 # Atlas Trekking 🏔️
